@@ -1,0 +1,46 @@
+.model small
+.stake 1024
+.data
+	msg1 db "Dati un sir:",'$'
+	msg2 db "Sir-ul este:",'$'
+	sir db 8 dup(' ')
+
+.code
+	start:
+		mov ax, dgroup
+		mox ds, ax
+		mov dx, offset msg1
+		mov ah, 09h
+
+		mov si, 0
+
+	citire1:
+		mov ah, 01h
+		int 21h
+		mov sir[si], al
+		inc si
+		cmp al, 13
+		je skip
+		jne citire1
+
+	skip:
+		mov sir[si], '$'
+		mov dx, offset msg2
+		mov ah, 09h
+		int 21h
+		mov si, 0
+
+	afisare:
+		mov dl, sir[si]
+		mov ah, 02h
+		int 21h
+		mov dl, ' '
+		int 21h
+		inc si
+		cmp sir[si], '$'
+		jne afisare
+
+	mov ah,4ch
+	int 21h
+
+end start
